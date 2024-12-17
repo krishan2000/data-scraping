@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const router = express.Router();
-// var db = require('../db_funtion');
 
 router.get("/tech-week", async (req, res) => {
     const browser = await puppeteer.launch({ headless: false });
@@ -84,40 +83,6 @@ router.get("/tech-week", async (req, res) => {
                     e.title === event.title && e.time === event.time && e.date === event.date
                 ))
             );
-            var data = uniqueEvents;
-            for (let i = 0; i < data.length; i++) {
-                const event = data[i];
-                var format = getNextDateForDay(event.date)
-                var startDate =  format.getFullYear() + '-' + parseInt(format.getMonth()+1) + '-' + format.getDate();
-                var endDate =  format.getFullYear() + '-' + parseInt(format.getMonth()+1) + '-' + (format.getDate()+1);
-                const [hours, minutes] = event.time.split(":");
-                const formattedHours = hours.padStart(2, '0');
-                var updatedTime = `${formattedHours}:${minutes}`;
-                var postData = {
-                    event_title : event.title,
-                    start_time : updatedTime,
-                    end_time : '2:00',
-                    start_date : startDate,
-                    end_date : endDate,
-                    organizer : event.host,
-                    site_event : "tech-week",
-                    is_draft : 1,
-                    added_by : 2,
-                    event_category : 545,
-                    charge : 0,
-                    website : event.detailLink,
-                    bar_id  : 70464,
-                    date_added : "2024-10-13 07:45:12"
-                };
-        try {
-            db.insertData('sss_events', postData).then(function(result) {
-                console.log("Event added successfully");
-            })
-        } catch (error) {
-            console.log(error);
-        }
-        
-    }
         // }
     } catch (error) {
         console.error("Error scraping data:", error);
@@ -125,15 +90,6 @@ router.get("/tech-week", async (req, res) => {
     } finally {
         await browser.close();
     }
-    return res.status(200).json({ result: results });
+    return res.status(200).json({ result: uniqueEvents });
 });
-router.get('/tech-events', (req, res) => {
-    var query = "select * from sss_events where site_event = 'tech-week' limit 100"
-    var data = [];
-    db.dbQuery(query).then(function(result) {
-        res.render('events', {data : result});
-    }).catch(function(error) {
-        res.render('events', {data : []});
-    });
-})
 module.exports = router;

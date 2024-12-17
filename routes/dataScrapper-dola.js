@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const cheerio = require("cheerio");
 const axios = require("axios");
-// var db = require('../db_funtion');
 
 router.get("/dola", async (req, res) => {
     try {
@@ -13,38 +12,7 @@ router.get("/dola", async (req, res) => {
             ))
         );
         var data = uniqueEvents;
-        for (let i = 0; i < data.length; i++) {
-            const event = data[i];
-            const [hours, minutes] = event.time.split(":");
-            const formattedHours = hours.padStart(2, '0');
-            var updatedTime = `${formattedHours}:${minutes}`;
-            var charge = (event.price != null && (parseInt(event.price)) != 0) ? 1 : 0;
-            var postData = {
-                event_title : event.title,
-                event_desc : event.description || "",
-                start_time : updatedTime,
-                end_time : '2:00',
-                start_date : event.date,
-                end_date : event.endDate,
-                address : event.address || "",
-                city : event.city || "",
-                state : event.state || "",
-                zipcode : event.zipCode || "",
-                event_image_link : event.image,
-                is_draft : 1,
-                added_by : 2,
-                admission : event.price || 0,
-                charge : charge,
-                site_event : 'dola',
-                date_added : "2024-10-14 03:40:12",
-                bar_id  : 70464,
-                buy_ticket : event.ticketLink || "",
-                website : event.detailLink
-            };
-            db.insertData('sss_events', postData).then(function(result) {
-                console.log("Event added successfully");
-            })
-        };
+        //save data in database
         return res.status(200).json({
             result: data,
         });
@@ -180,16 +148,5 @@ async function webDataScraperchild(url) {
     var price = priceInfo.length > 1 ? (priceInfo[0] + "." + priceInfo[1]) : priceInfo.length == 1 ? priceInfo[0] : 0;
     return {description, price, ticketLink}
 };
-
-router.get('/dola-events', (req, res) => {
-    var query = "select * from sss_events where site_event = 'dola'";
-    var data = [];
-    db.dbQuery(query).then(function(result) {
-        res.render('events', {data : result});
-    }).catch(function(error) {
-        res.render('events', {data : []});
-    });
-   
-});
 
 module.exports = router

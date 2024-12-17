@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const router = express.Router();
-// var db = require('../db_funtion');
 
 router.get("/eventbrite", async (req, res) => {
     const browser = await puppeteer.launch({ headless: false });
@@ -65,35 +64,7 @@ router.get("/eventbrite", async (req, res) => {
                 childData.push(detailData);
             };
             results.push(...childData);
-            var data = results;
-            console.log(data.length);
-            
-            for (let i = 0; i < data.length; i++) {
-                const event = data[i];
-                //title, fullDateTime, image, vanue, address, zipCode, state, country, description, organizer, price
-                var postData = {
-                    event_title : event.title,
-                    start_time :event.fullDateTime,
-                    address : event.address || "",
-                    event_desc : event.description || "",
-                    city : event.city || "",
-                    state : event.state || "",
-                    zipcode : event.zipCode || "",
-                    country : event.country || "",
-                    event_image : event.image,
-                    venue : event.vanue,
-                    organizer : event.organizer,
-                    site_event : "eventbrite"
-                };
-                try {
-                    db.insertData('sss_events', postData).then(function(result) {
-                        console.log("Event added successfully");
-                    })
-                } catch (error) {
-
-                    console.log(error);
-                };
-            };
+            //save data in database
         };
     } catch (error) {
         console.error("Error scraping data:", error);

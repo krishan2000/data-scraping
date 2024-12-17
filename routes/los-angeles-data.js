@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const router = express.Router();
-// var db = require('../db_funtion');
 
 router.get("/los-angeles", async (req, res) => {
     const browser = await puppeteer.launch({ headless: true })
@@ -114,63 +113,10 @@ router.get("/los-angeles", async (req, res) => {
         ))
     );
     var data = uniqueEvents;
-    for (let i = 0; i < data.length; i++) {
-        const event = data[i];
-        var price = event.price.split('-');
-        var startPrice  = price[0];
-        var endPrice = price > 1 ? price[1] : 0;
-        const [hours, minutes] = event.time.split(":");
-        const formattedHours = hours.padStart(2, '0');
-        var updatedTime = `${formattedHours}:${minutes}`;
-        var peopleCount = event.peopleCount ? parseInt(event.peopleCount) : null
-        var postData = {
-            event_title : event.title,
-            start_time : updatedTime,
-            end_time : '2:00',
-            start_date : event.startDate,
-            end_date : event.endDate,
-            is_draft : 1,
-            added_by : 2,
-            address : event.address || "",
-            city : event.city || "",
-            state : event.state || "",
-            zipcode : event.zipCode || "",
-            country : event.country || "",
-            admission : startPrice,
-            admissiontoPrice : endPrice,
-            charge : 1,
-            event_image_link : event.image,
-            site_event : "los-angeles",
-            date_added : "2024-10-14 05:21:12",
-            bar_id  : 70464,
-            buy_ticket : event.ticketLink,
-            people_count : peopleCount,
-            website : event.website || ""
-        };
-        try {
-            db.insertData('sss_events', postData).then(function(result) {
-                console.log("Event added successfully");
-            })
-        } catch (error) {
-            console.log(error);
-        }
-        
-    }
     return res.status(200).json({
-        length : filteredData.length,
-        result: filteredData
+        length : data.length,
+        result: data
     });
-});
-
-router.get('/los-events', (req, res) => {
-    var query = "select * from sss_events where site_event = 'los-angeles' limit 100,200"
-    var data = [];
-    db.dbQuery(query).then(function(result) {
-        res.render('events', {data : result});
-    }).catch(function(error) {
-        res.render('events', {data : []});
-    });
-   
 });
 
 

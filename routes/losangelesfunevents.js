@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const router = express.Router();
-// var db = require('../db_funtion');
 
 router.get("/losangelesfunevents", async (req, res) => {
     const browser = await puppeteer.launch({ headless: true })
@@ -122,58 +121,11 @@ router.get("/losangelesfunevents", async (req, res) => {
             e.title === event.title && e.startTime === event.startTime && e.startDate === event.startDate
         ))
     );
-    var data = uniqueEvents;
-var data = results
-for (let i = 0; i < data.length; i++) {
-        const event = data[i];
-        var postData = {
-            event_title : event.title,
-            event_desc : event.description,
-            start_time :event.startTime,
-            end_time : event.endTime,
-            start_date : event.startDate,
-            end_date : event.endDate,
-            address : event.address,
-            city : event.city,
-            state : event.state,
-            zipcode : event.zipCode,
-            event_image_link : event.image,
-            event_fb_link : event.fbLink,
-            event_twitter_link : event.twitterLink,
-            charge : 0,
-            is_draft : 1,
-            added_by : 2,
-            site_event : 'los-fun-event',
-            date_added : "2024-10-13 07:45:12",
-            buy_ticket : event.detailLink,
-            website : event.detailLink,
-            bar_id  : 70464
-        };
-        try {
-            db.insertData('sss_events', postData).then(function(result) {
-                console.log("Event added successfully");
-            })
-        } catch (error) {
-
-            console.log(error);
-        }
-        
-    }
     return res.status(200).json({
-        result: results
+        result: uniqueEvents
     });
 });
 
-router.get('/los-fun-events', (req, res) => {
-    var query = "select * from sss_events where site_event = 'los-fun-event'";
-    var data = [];
-    db.dbQuery(query).then(function(result) {
-        res.render('events', {data : result});
-    }).catch(function(error) {
-        res.render('events', {data : []});
-    });
-   
-});
 
 
 module.exports = router;
