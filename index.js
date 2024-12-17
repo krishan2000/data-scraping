@@ -7,8 +7,6 @@ var eventbrite = require('./routes/eventbrite');
 var techWeek = require('./routes/tech-week');
 
 
-var db = require('./db_funtion');
-
 require('dotenv');
 var app = express();
 var routes = express.Router();
