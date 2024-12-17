@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const cheerio = require("cheerio");
 const axios = require("axios");
-var db = require('../db_funtion');
+// var db = require('../db_funtion');
 
 router.get("/dola", async (req, res) => {
     try {

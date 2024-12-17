@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const router = express.Router();
-var db = require('../db_funtion');
+// var db = require('../db_funtion');
 
 router.get("/los-angeles", async (req, res) => {
     const browser = await puppeteer.launch({ headless: true })
