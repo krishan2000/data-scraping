@@ -12,8 +12,7 @@ var connection = Bluebird.promisifyAll(mysql.createConnection({
 
 connection.connect(function (err) {
     if (err)
-        console.log(err);
-        // throw err;
+        throw err;
     console.log("Connected!");
 });
 
