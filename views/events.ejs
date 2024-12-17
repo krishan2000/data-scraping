@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container mt-3">
+        <% if(data.length){
+            for(i = 0; i < data.length; i++) {
+                var res = data[i]
+                if(res.start_date){
+                    var date = new Date(res.start_date).getFullYear();
+                    var month = new Date(res.start_date).getMonth()+1;
+                    var day = new Date(res.start_date).getDate();
+                    var finalDate = date +'-'+ month + '-'+ day
+                }
+                var url = res.event_image.split(/v1/)[0];
+                const image = url.endsWith('/') ? url.slice(0, -1) : res.event_image;
+                %>
+        <div class="card img-fluid mt-5 p-5">
+            <img class="card-img-top" src="<%= image %>" onerror=" this.onerror=null; this.src='https://placehold.jp/500x500.png';" alt="Card image" style="width:100%">
+            <div class="">
+                <h2 class="card-title"><%= res.event_title %></h2>
+                <p class="card-text">Date : <%= finalDate %></p>
+                <p class="card-text">Time : <%= res.start_time %></p>
+                <p class="card-text">venue : <%= res.venue %></p>
+                <% if(res.charge !=0){ %>
+                <p class="card-text">Price : <%= res.charge %>$</p>
+                <% } %>
+                <!-- <% if(res.address && res.city && res.state && res.zipcode && res.country){ %> -->
+                <p class="card-text">Address : <%= res.address %>, <%= res.city %>, <%= res.state %>, <%= res.zipcode %>, <%= res.country %></p>
+                <!-- <% } %> -->
+                <p class="card-text"><%- res.event_desc %></p>
+            </div>
+        </div>
+        <% }}else{ %>
+        No events found
+        <%} %>
+    </div>
+
+</body>
+
+</html>
